@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # ISTE 432
 # Eyob Abegaz, 
 # Exercise - 2
