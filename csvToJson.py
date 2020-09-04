@@ -17,16 +17,16 @@ my_date = time.strftime('%Y%m%d')
 
 # Read and fix the original csv file and
 # write the fixed data on another csv file
-with open('mockData.csv', 'r') as inpu, open('fixed_mocked.csv', 'w') as out:
+with open('mockData.csv', 'r') as inpu, open('fixedMock.csv', 'w') as out:
     for line in inpu:
-        l=line.replace(', Jr,', ',').replace(', III,', ',').replace(', ', ',').lower()
+        l=line.replace(', Jr,', ' Jr,').replace(', III,', ' III,').replace(', ', ',').lower()
         out.write(l)
 
 # Create a dictionary 
 data = {} 
       
 # Open a csv reader called DictReader 
-with open('fixed_mocked.csv', 'r') as f: 
+with open('fixedMock.csv', 'r') as f: 
      csvReader = csv.DictReader(f) 
           
      # Convert each row into a dictionary  
