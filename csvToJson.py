@@ -1,46 +1,63 @@
 #!/usr/bin/python
 # ISTE 432
-# Eyob Abegaz, 
+# 09/04/2020
+# Eyob Abegaz 
 # Exercise - 2
 # Converting CSV file to JESON file
 
-# Import csv module to read and write tabular data in CSV format
-# Import json module to convert the python dictionary into a json string 
-# that can be written into a file
+# Import re module to get full support for the regular expressions 
 # Import time module to get today's date in YYYYMMDD format
 import csv
 import json
+import re
 import time
 
-# Assign today's date in YYYYMMDD format to a variable 
-my_date = time.strftime('%Y%m%d')
+# Function to fix the original csv file and 
+# write the first name, last name, and gender in json file
+def changeToJson():
 
-# Read and fix the original csv file and
-# write the fixed data on another csv file
-with open('mockData.csv', 'r') as inpu, open('fixedMock.csv', 'w') as out:
-    for line in inpu:
-        l=line.replace(', Jr,', ' Jr,').replace(', III,', ' III,').replace(', ', ',').lower()
-        out.write(l)
+    # Assign today's date in YYYYMMDD format to a variable 
+    my_date = time.strftime('%Y%m%d')
 
-# Create a dictionary 
-data = {} 
-      
-# Open a csv reader called DictReader 
-with open('fixedMock.csv', 'r') as f: 
-     csvReader = csv.DictReader(f) 
-          
-     # Convert each row into a dictionary  
-     # and add it to data 
-     for rows in csvReader: 
-              
-         # Assuming a column named 'id' to 
-         # be the primary key 
-         key = rows['id'] 
-         data[key] = rows 
-  
-# Open a json writer, and use the json.dumps()  
-# function to dump data 
-with open(str(my_date) +'.json', 'w') as jf:
+    # Read and fix the original csv file and
+    # open a json file in write mode
+    with open('mockData.csv', 'r') as inpu, open(str(my_date) +'.json', 'w') as outpu:
+        
+        # Read line by line
+        lines = inpu.readlines()
+        
+        # Remove the first line(the header)
+        lines = lines[1:]
+
+        # regex for email matching  
+        email = re.compile('[a-zA-Z0-9-_.]+@[a-zA-Z0-9-_.]+')  
+        outpu.write("[\n")
+        for line in lines:
+            lineList = line.lower().strip().split(',')
     
-    # Make it more readable and pretty while writing
-    jf.write(json.dumps(data, indent=4))
+            # Assign list items based on the index
+            # to work with the desired fields
+            fName = lineList[1]
+            lName = lineList[2]
+            gender = lineList[4] if email.match(lineList[3]) else lineList[5]
+            desResult = ('{"First Name":"' + fName.title() + '","Last Name":"' + lName.title() + '","Gender":"' + gender.title() + '"},\n')
+            if lines.index(line) == len(lines) - 1:  
+                
+                # Remove comma and new line from last lines
+                desResult = desResult[:-2]  
+            
+            # Write into the json file               
+            outpu.write(desResult)
+          
+        outpu.write("\n]")
+
+        # Close both files
+        outpu.close()
+        inpu.close()
+
+# main
+if __name__ == '__main__':
+
+    # Call the function changeToJson
+    changeToJson()
+
