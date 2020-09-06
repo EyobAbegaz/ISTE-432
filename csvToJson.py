@@ -38,7 +38,7 @@ def changeToJson():
             # Assign list items based on the index
             # to work with the desired fields
             fName = lineList[1]
-            lName = lineList[2]
+            lName = lineList[2] if email.match(lineList[3]) else lineList[2] + '' + lineList[3]
             gender = lineList[4] if email.match(lineList[3]) else lineList[5]
             desResult = ('{"First Name":"' + fName.title() + '","Last Name":"' + lName.title() + '","Gender":"' + gender.title() + '"},\n')
             if lines.index(line) == len(lines) - 1:  
